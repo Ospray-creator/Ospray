@@ -1,0 +1,9 @@
+{
+  "nameShort": "FineINK",
+  "nameLong": "FineINK IDE",
+  "applicationName": "fineink",
+  "dataFolderName": ".fineink",
+  "win32MutexName": "fineink",
+  "licenseName": "MIT",
+  "licenseUrl": "https://opensource.org/licenses/MIT"
+}

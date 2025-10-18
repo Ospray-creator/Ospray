@@ -1,0 +1,94 @@
+{
+  "name": "ai-core",
+  "displayName": "FineInk AI Core",
+  "version": "0.0.1",
+  "publisher": "fineink",
+  "engines": { "vscode": "^1.106.0" },
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:fineink.ai.chat.open",
+    "onCommand:fineink.ai.configure",
+    "onCommand:fineink.ai.configureApiKey",
+    "onCommand:fineink.ai.discoverModels",
+    "onCommand:fineink.mcp.connect",
+    "onCommand:fineink.ai.applyEdits"
+  ],
+  "contributes": {
+    "commands": [
+      { "command": "fineink.ai.chat.open", "title": "FineInk AI: Открыть чат" },
+      { "command": "fineink.ai.configure", "title": "FineInk AI: Настроить модель" },
+      { "command": "fineink.ai.configureApiKey", "title": "FineInk AI: Настроить API ключ" },
+      { "command": "fineink.ai.discoverModels", "title": "FineInk AI: Обнаружить модели" },
+      { "command": "fineink.mcp.connect", "title": "FineInk AI: Подключить MCP" },
+      { "command": "fineink.ai.applyEdits", "title": "FineInk AI: Применить правки" }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        { "id": "fineink.views", "title": "FineInk", "icon": "$(sparkle)" }
+      ]
+    },
+    "views": {
+      "fineink.views": [
+        { "id": "fineink.chatHistory", "name": "История чатов" }
+      ]
+    },
+    "chatParticipants": [
+      {
+        "id": "fineink.ai.core",
+        "fullName": "FineInk AI",
+        "description": "Локальная/кастомная LLM, встроенная в Chat"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "FineInk AI",
+      "properties": {
+        "fineink.ai.provider": {
+          "type": "string", "enum": ["openai", "ollama", "lmstudio", "custom"], "default": "openai", "description": "Провайдер AI"
+        },
+        "fineink.ai.baseUrl": {
+          "type": "string", "default": "http://127.0.0.1:11434/v1", "description": "Базовый URL API"
+        },
+        "fineink.ai.apiKey": {
+          "type": "string", "default": "", "description": "API ключ (если нужен)"
+        },
+        "fineink.ai.model": {
+          "type": "string", "default": "gpt-3.5-turbo", "description": "Модель"
+        },
+        "fineink.ai.temperature": {
+          "type": "number", "default": 0.2, "minimum": 0, "maximum": 2, "description": "Температура"
+        },
+        "fineink.ai.maxTokens": {
+          "type": "number", "default": 2048, "minimum": 1, "maximum": 32000, "description": "Максимум токенов"
+        },
+        "fineink.ai.autoDiscoverModels": {
+          "type": "boolean", "default": true, "description": "Автообнаружение моделей"
+        },
+        "fineink.mcp.stdio.command": {
+          "type": "string", "default": "fineink-mcp.exe", "description": "Команда MCP"
+        },
+        "fineink.mcp.stdio.args": {
+          "type": "array", "default": ["--profile","default"], "items": {"type": "string"}, "description": "Аргументы MCP"
+        },
+        "fineink.policy.allowedPaths": {
+          "type": "array", "default": ["${workspaceFolder}", "C:/Logs"], "items": {"type": "string"}, "description": "Разрешённые пути"
+        },
+        "fineink.policy.maxBytes": {
+          "type": "number", "default": 10485760, "description": "Макс. размер файла"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "esbuild src/extension.ts --bundle --platform=node --format=cjs --external:vscode --sourcemap --outfile=dist/extension.js",
+    "watch": "esbuild src/extension.ts --bundle --platform=node --format=cjs --external:vscode --sourcemap --outfile=dist/extension.js --watch"
+  },
+  "dependencies": {
+    "eventsource-parser": "^1.1.2"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.105.0",
+    "esbuild": "^0.23.0"
+  }
+}
